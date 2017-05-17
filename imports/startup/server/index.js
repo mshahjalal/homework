@@ -2,3 +2,5 @@
 
 import './fixtures.js';
 import './register-api.js';
+
+var graph = require('fbgraph');

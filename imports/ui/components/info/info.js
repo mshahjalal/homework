@@ -4,12 +4,19 @@ import './info.html';
 
 Template.info.onCreated(function () {
   Meteor.subscribe('links.all');
+  Meteor.subscribe('users.all');
 });
 
 Template.info.helpers({
   links() {
     return Links.find({});
   },
+  getUserList(){
+	  return Meteor.users.find();
+  },
+  isLoggedIn(){
+	  return Meteor.userId();
+  }
 });
 
 Template.info.events({
@@ -29,4 +36,45 @@ Template.info.events({
       }
     });
   },
+  'submit .add-post-form'(event) {
+    event.preventDefault();
+
+    const target = event.target;
+    const newPost = target.postmessage;
+
+    Meteor.call('postToFacebok', newPost.value, function(error, result) {
+      if (error) {
+        console.log(error.error);
+      } else {
+        console.log("Post id: ", result);
+      }
+    });
+  },
+  'click .facebook-user-data'(event){
+	  Meteor.call('getFacebokUserData', function(error, result) {
+      if (error) {
+        console.log(error.error);
+      } else {
+        console.log("Data: ", result);
+      }
+    });
+  },
+  'click .facebook-user-picture'(event) {
+    Meteor.call('getFacebokUserPicture', function(error, result) {
+      if (error) {
+        console.log(error.error);
+      } else {
+        console.log("facebook user picture: ", result);
+      }
+    });
+  },
+  'click .facebook-user-profile'(event){
+	  Meteor.call('getUserProfileInfoAndFriendsInfo', function(error, result) {
+      if (error) {
+        console.log(error.error);
+      } else {
+        console.log("facebook user and friends: ", result);
+      }
+    });
+  }
 });

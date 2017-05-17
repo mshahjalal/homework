@@ -1,6 +1,38 @@
 <template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
+	{{#if isLoggedIn}}
+		<h2>Show facebook users</h2>
+		<ul>
+			{{#each getUserList}}
+				{{#if services.facebook.accessToken}}
+					<li><a href="{{services.facebook.link}}" target="_blank">{{services.facebook.name}}</a></li>
+				{{/if}}
+			{{/each}}
+		</ul>
+		<br/>
+		<br/>
+
+		<h2>Add post in my facebook wall</h2>
+
+		<form class="add-post-form">
+			<input type="text" name="postmessage" placeholder="Enter a text" required>
+			<input type="submit" name="submit" class="submit-post" value="Add new post">
+		</form>
+		<br/>
+		<br/>
+		
+		<h2><a href="#" class="facebook-user-data">Collect facebook user data</a></h2>
+		
+		<br/>
+		<br/>
+		<h2><a href="#" class="facebook-user-picture">facebook user picture</a></h2>
+		
+		<br/>
+		<h2><a href="#" class="facebook-user-profile">facebook user profile and friends info</a></h2>
+		
+		
+	{{/if}}
+  
+  <!--<ul>
     <li>
       <form class="info-link-add">
         <input type="text" name="title" placeholder="Title" required>
@@ -11,5 +43,5 @@
     {{#each links}}
       <li><a href="{{url}}" target="_blank">{{title}}</a></li>
     {{/each}}
-  </ul>
+  </ul>-->
 </template>
