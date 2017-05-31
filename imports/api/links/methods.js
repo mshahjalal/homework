@@ -3,6 +3,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Links } from './links.js';
+import { Messages } from './messages.js';
 
 Meteor.methods({
   'links.insert'(title, url) {
@@ -91,5 +92,56 @@ Meteor.methods({
 		}
 		else return false;  
 		
+	},
+	getUserInfoUsingFqlQuery(){
+		var graph = require('fbgraph'),
+		userInfo = Meteor.users.findOne(Meteor.userId());
+		
+		if(userInfo && userInfo.services.facebook.accessToken) {
+          graph.setAccessToken(userInfo.services.facebook.accessToken);
+		  graph.setVersion("2.9");
+		  
+		  var query = {
+				name: "SELECT name FROM user WHERE uid = me()",
+				permissions: "SELECT email, user_about_me, user_birthday FROM permissions WHERE uid = me()"
+			};
+
+			graph.fql(query, function(err, res) {
+			  console.log(res);
+			  if(err) return err;
+			  else return res;
+			});
+		}		
+	},
+	sendTextMessage(messageText){
+		var messageInfo = Messages.findOne(),
+			messageData = {
+				recipient: messageInfo.recipient,
+				message: {
+				  text: messageText
+				}
+			};
+
+	  callSendAPI(messageData);
 	}
 });
+
+function callSendAPI(messageData) {
+  HTTP.call('POST','https://graph.facebook.com/v2.9/me/messages', {
+		data: {
+			access_token: "EAAJGb0Uv6ZBYBAO2BAhHzpPqKhb6gGHVPZBMxsIzr8krgHZA3TGWTbe2Lbp8FMcz0mCyF1hjQnlA6axsauNtSHoZCvz737A4ZA8ZCrpLAmPaijxrnREnlcPcYlnGBxxq0R5HXn24UsbbLkpUu9T71lHHbM2XLR78MLTGaBjZAtMsQZDZD"
+		},
+		json: messageData
+	}, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+		  var recipientId = body.recipient_id;
+		  var messageId = body.message_id;
+
+		  console.log("Successfully sent generic message with id %s to recipient %s", messageId, recipientId);
+		} else {
+		  console.error("Unable to send message.");
+		  console.error(response);
+		  console.error(error);
+		}
+  });  
+}

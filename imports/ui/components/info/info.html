@@ -1,5 +1,5 @@
 <template name="info">
-	{{#if isLoggedIn}}
+	<!--{{#if isLoggedIn}}-->
 		<h2>Show facebook users</h2>
 		<ul>
 			{{#each getUserList}}
@@ -29,8 +29,25 @@
 		<br/>
 		<h2><a href="#" class="facebook-user-profile">facebook user profile and friends info</a></h2>
 		
+		<br/>
+		<h2>Messanger chat box</h2>
+		<h2><a href="http://m.me/1573961765982112" >Messanger</a></h2>
 		
-	{{/if}}
+		<br/>
+		<h2>Show all messages</h2>
+		{{#each getMessageList}}
+			<span>---------------</span>
+			<p> {{message.text}}</p>
+		{{/each}}
+		<br/>
+		<h2>Message Reply</h2>
+		<form class="message-post-form">
+			<input type="text" name="postapimessage" placeholder="Enter a text" required>
+			<input type="submit" name="submit" class="message-post" value="Send">
+		</form>
+		<br/>
+		<!--<h2><a href="#" class="facebook-user-info-using-fql">facebook user info using fql query</a></h2>-->
+	<!--{{/if}}-->
   
   <!--<ul>
     <li>

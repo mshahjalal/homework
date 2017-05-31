@@ -28,3 +28,8 @@ accounts-ui
 accounts-password
 accounts-facebook
 facebook-config-ui
+meteorhacks:picker
+meteorhacks:npm
+
+
+npm-container

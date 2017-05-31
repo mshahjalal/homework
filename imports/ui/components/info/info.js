@@ -1,10 +1,12 @@
 import { Links } from '/imports/api/links/links.js';
 import { Meteor } from 'meteor/meteor';
 import './info.html';
+import { Messages } from '/imports/api/links/messages.js';
 
 Template.info.onCreated(function () {
   Meteor.subscribe('links.all');
   Meteor.subscribe('users.all');
+  Meteor.subscribe('messages.all');
 });
 
 Template.info.helpers({
@@ -16,6 +18,9 @@ Template.info.helpers({
   },
   isLoggedIn(){
 	  return Meteor.userId();
+  },
+  getMessageList(){
+	  return Messages.find({}).fetch();
   }
 });
 
@@ -74,6 +79,29 @@ Template.info.events({
         console.log(error.error);
       } else {
         console.log("facebook user and friends: ", result);
+      }
+    });
+  },
+  'click .facebook-user-info-using-fql'(event){
+	  Meteor.call('getComments', function(error, result) {
+      if (error) {
+        console.log(error.error);
+      } else {
+        console.log("facebook user info using fql query: ", result);
+      }
+    });
+  },
+  'submit .message-post-form'(event) {
+    event.preventDefault();
+
+    const target = event.target;
+    const newPost = target.postapimessage
+
+    Meteor.call('sendTextMessage', newPost.value, function(error, result) {
+      if (error) {
+        console.log(error.error);
+      } else {
+        console.log("message id: ", result);
       }
     });
   }
