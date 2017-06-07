@@ -35,16 +35,20 @@
 		
 		<br/>
 		<h2>Show all messages</h2>
+		
 		{{#each getMessageList}}
-			<span>---------------</span>
+			<span>----------------------------------------------------</span>
 			<p> {{message.text}}</p>
+			Reply: <input type="text" name="{{_id}}" id="{{_id}}" placeholder="Enter a text" required>
+			<input type="button" name="submit" class="message-post" value="Send">
+			<br/>
 		{{/each}}
+		
 		<br/>
-		<h2>Message Reply</h2>
-		<form class="message-post-form">
-			<input type="text" name="postapimessage" placeholder="Enter a text" required>
-			<input type="submit" name="submit" class="message-post" value="Send">
-		</form>
+		
+		
+			
+		
 		<br/>
 		<!--<h2><a href="#" class="facebook-user-info-using-fql">facebook user info using fql query</a></h2>-->
 	<!--{{/if}}-->

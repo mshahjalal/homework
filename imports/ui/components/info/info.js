@@ -91,13 +91,16 @@ Template.info.events({
       }
     });
   },
-  'submit .message-post-form'(event) {
+  'click .message-post'(event) {
     event.preventDefault();
 
-    const target = event.target;
-    const newPost = target.postapimessage
+    const selector = $(event.target).closest(".message-post");
+	var id = this._id,
+	text = $("#"+id).val();
+	console.log("_id: ", this._id);
+	console.log("text: ", text);
 
-    Meteor.call('sendTextMessage', newPost.value, function(error, result) {
+    Meteor.call('sendTextMessage', text, id, function(error, result) {
       if (error) {
         console.log(error.error);
       } else {

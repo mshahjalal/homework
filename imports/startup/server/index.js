@@ -3,6 +3,7 @@
 import './fixtures.js';
 import './register-api.js';
 import { Picker } from 'meteor/meteorhacks:picker';
+import { Messages } from '/imports/api/links/messages.js';
 
 var graph = require('fbgraph');
 //const Messages = new Mongo.Collection('fb_messages');
@@ -42,9 +43,9 @@ postRoutes.route('/webhook', function(params, req, res, next) {
 				timeOfEvent = entryInfo.time;
 				
 				if(entryInfo.messaging){
-					_.each(entryInfo.messaging || [], function(messages){
-						if (messages.message) {
-							receivedMessage(messages, pageID, timeOfEvent);
+					_.each(entryInfo.messaging || [], function(entryMessages){
+						if (entryMessages.message) {
+							receivedMessage(entryMessages, pageID, timeOfEvent);
 						}
 					});
 				}
@@ -66,3 +67,27 @@ var receivedMessage = function(messageInfo, pageID, time) {
 		console.log("messageId: ", messageId);
 	}	
 };
+
+
+getRoutes.route('/commentwebhook', function(params, req, res, next) {
+  if (params.query['hub.verify_token'] === 'commenttoken' && params.query['hub.mode'] === 'subscribe') {
+        console.log(params.query['hub.verify_token']);
+		console.log(params.query['hub.challenge']);
+        // res.end();
+        res.end(params.query['hub.challenge']);
+  }
+});
+
+postRoutes.route('/commentwebhook', function(params, req, res, next) {
+	var data = req.body;
+  console.log("data: ", data);
+	if (data.object === 'page' && data.entry) {
+		_.each(data.entry || [], function(entryInfo){
+			if(entryInfo){
+				console.log("entryInfo: ", entryInfo);
+			}			
+		});
+	}	
+	
+	res.end();
+});

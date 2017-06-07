@@ -113,10 +113,10 @@ Meteor.methods({
 			});
 		}		
 	},
-	sendTextMessage(messageText){
-		var messageInfo = Messages.findOne(),
+	sendTextMessage(messageText, id){
+		var messageInfo = Messages.findOne(id),
 			messageData = {
-				recipient: messageInfo.recipient,
+				recipient: messageInfo.sender,
 				message: {
 				  text: messageText
 				}
@@ -127,9 +127,9 @@ Meteor.methods({
 });
 
 function callSendAPI(messageData) {
-  HTTP.call('POST','https://graph.facebook.com/v2.9/me/messages', {
+  HTTP.call('POST','https://graph.facebook.com/v2.9/1573961765982112/thread_settings', {
 		data: {
-			access_token: "EAAJGb0Uv6ZBYBAO2BAhHzpPqKhb6gGHVPZBMxsIzr8krgHZA3TGWTbe2Lbp8FMcz0mCyF1hjQnlA6axsauNtSHoZCvz737A4ZA8ZCrpLAmPaijxrnREnlcPcYlnGBxxq0R5HXn24UsbbLkpUu9T71lHHbM2XLR78MLTGaBjZAtMsQZDZD"
+			access_token: "EAAJGb0Uv6ZBYBAGlfsT9mc7FJwnr9Fc64uyzca8vBbl4VuMOUm5jGrsnExOaja0jEQY4sBMQBOsYPOxrgKUK526padjCgZCY9jQZBZCIIEG92oAnFcZBEm9p14cHwjwSuOeiK2DG6xmxIzBGcVLuPaDorVSDxzBm8ZCC6vhpzLBwZDZD"
 		},
 		json: messageData
 	}, function (error, response, body) {
@@ -143,5 +143,5 @@ function callSendAPI(messageData) {
 		  console.error(response);
 		  console.error(error);
 		}
-  });  
+  }); 
 }
